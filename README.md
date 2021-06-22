@@ -54,6 +54,9 @@
 ![image](https://user-images.githubusercontent.com/84304021/122904378-3ea75280-d38b-11eb-8659-b6e936f3f83f.png)
 
 #### 완성된 1차 모형
+![image](https://user-images.githubusercontent.com/84304021/122904724-8e861980-d38b-11eb-95c1-eb2c795a9a33.png)
+
+#### 1차 완성본에 대한 기능적/비기능적 요구사항을 커버하는지 검증
 
 
 
