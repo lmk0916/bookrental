@@ -91,3 +91,126 @@ Blue
 - 서브 도메인과 바운디드 컨텍스트의 분리:  각 팀의 KPI 별로 아래와 같이 관심 구현 스토리를 나눠가짐
 ```
 ## 구현
+분석/설계 단계에서 도출된 헥사고날 아키텍처에 따라, 각 BC별로 대변되는 마이크로 서비스들을 스프링부트로 구현하였다. 구현한 각 서비스를 로컬에서 실행하는 방법은 아래와 같다 (각자의 포트넘버는 8081 ~ 808n 이다)
+```
+cd ask
+mvn spring-boot:run
+
+cd pay
+mvn spring-boot:run 
+
+cd book
+mvn spring-boot:run  
+
+cd mypage
+mvn spring-boot:run
+```
+게이트웨이 내부에서 spring, docker 환경에 따른 각 서비스 uri를 설정해주고 있다.
+```
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: ask
+          uri: http://localhost:8081
+          predicates:
+            - Path=/asks/** 
+        - id: pay
+          uri: http://localhost:8082
+          predicates:
+            - Path=/pays/** 
+        - id: book
+          uri: http://localhost:8083
+          predicates:
+            - Path=/books/** 
+        - id: mypage
+          uri: http://localhost:8084
+          predicates:
+            - Path= /mypages/**
+.....생략
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: ask
+          uri: http://ask:8080
+          predicates:
+            - Path=/asks/** 
+        - id: pay
+          uri: http://pay:8080
+          predicates:
+            - Path=/pays/** 
+        - id: book
+          uri: http://book:8080
+          predicates:
+            - Path=/books/** 
+        - id: mypage
+          uri: http://mypage:8080
+          predicates:
+            - Path= /mypages/**
+...
+```
+### DDD 의 적용
+- 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다.
+```
+package bookrental;
+
+import javax.persistence.*;
+import org.springframework.beans.BeanUtils;
+import java.util.List;
+
+@Entity
+@Table(name="Ask_table")
+public class Ask {
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+    private String status;
+    private Long bookId;
+    
+    .../... 중략  .../...
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public Long getBookId() {
+        return bookId;
+    }
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
+    public String getAskDate() {
+        return askDate;
+    }
+    .../... 중략  .../...
+}
+```
+- Entity Pattern 과 Repository Pattern 을 적용하여 JPA 를 통하여 다양한 데이터소스 유형에 대한 별도의 처리가 없도록 데이터 접근 어댑터를 자동 생성하기 위하여 Spring Data REST 의 RestRepository 를 적용하였다.
+```
+package bookrental;
+
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+public interface AskRepository extends PagingAndSortingRepository<Ask, Long>{
+}
+```
+- 적용 후 REST API 의 테스트
+```
+# book 서비스의 등록처리
+http book:8080/books id=13 status=WATING bookName=1234
+```
