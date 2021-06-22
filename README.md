@@ -214,3 +214,102 @@ public interface AskRepository extends PagingAndSortingRepository<Ask, Long>{
 # book 서비스의 등록처리
 http book:8080/books id=13 status=WATING bookName=1234
 ```
+테스트화면!!!!
+
+```
+# ask 서비스의 대여신청처리
+http post  ask:8080/asks id=1 status="ASKED"
+```
+테스트화면!!!!
+
+```
+# 도서 상태 조회
+http get book:8080/books
+```
+테스트화면!!!!
+테스트화면!!!!!
+
+```
+# 도서 대여상태 조회(CQRS)
+http get mypage:8080/mypages
+```
+테스트화면!!!!
+테스트화면!!!!!
+
+### 폴리글랏 퍼시스턴스
+각 마이크로서비스는 별도의 H2 DB를 가지고 있으며 CQRS를 위한 Mypage에서는 H2가 아닌 HSQLDB를 적용하였다.
+
+```
+# Mypage의 pom.xml에 dependency 추가
+<!-- 
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+ -->
+		<dependency>
+		    <groupId>org.hsqldb</groupId>
+		    <artifactId>hsqldb</artifactId>
+		    <version>2.4.0</version>
+		    <scope>runtime</scope>
+		</dependency>
+
+```
+
+### 동기식 호출 과 Fallback 처리
+분석단계에서의 조건 중 하나로 예약(book)->결제(payment) 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다. 호출 프로토콜은 이미 앞서 Rest Repository 에 의해 노출되어있는 REST 서비스를 FeignClient 를 이용하여 호출하도록 한다.
+- 결제서비스를 호출하기 위하여 Stub과 (FeignClient) 를 이용하여 Service 대행 인터페이스 (Proxy) 를 구현
+```
+# (ask) PayService.java
+
+package bookrental.external;
+
+@FeignClient(name="pay", url="http://pay:8080")
+public interface PayService {
+
+    @RequestMapping(method= RequestMethod.POST, path="/pays")
+    public void pay(@RequestBody Pay pay);
+
+    @RequestMapping(method= RequestMethod.POST, path="/pays/{askId}")
+    public void payCancel(@RequestBody Pay pay, @PathVariable("bookId") Long bookId);
+
+}
+```
+- 수신을 받은 직후(@PostPersist) 결제를 요청하도록 처리
+```
+# Ask.java (Entity)
+
+    @PostPersist 
+    public void onPostPersist(){
+
+        if (this.getStatus().equals("ASKED")) {
+            Asked asked = new Asked();
+            BeanUtils.copyProperties(this, asked);
+            asked.publishAfterCommit();
+
+            bookrental.external.Pay pay = new bookrental.external.Pay();
+            // mappings goes here
+            pay.setaskId(this.getId());
+            pay.getBookId(this.getBookId());
+            pay.setStatus(this.getStatus());
+            AskApplication.applicationContext.getBean(bookrental.external.PayService.class)
+                    .pay(pay);
+        }
+    } 
+```
+- 동기식 호출에서는 호출 시간에 따른 타임 커플링이 발생하며, 결제 시스템이 장애가 나면 주문도 못받는다는 것을 확인
+```
+# 결제 (pay) 서비스를 잠시 내려놓음 (ctrl+c)
+
+#신청처리
+http ask:8080/asks #Fail
+
+#결제서비스 재기동
+cd pay
+mvn spring-boot:run
+
+#신청처리
+http ask:8080/asks #Fail   #Success
+```
+- 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, 폴백 처리는 운영단계에 설명)
