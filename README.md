@@ -57,6 +57,7 @@
 ![image](https://user-images.githubusercontent.com/84304021/122904724-8e861980-d38b-11eb-95c1-eb2c795a9a33.png)
 
 #### 1차 완성본에 대한 기능적/비기능적 요구사항을 커버하는지 검증
+![image](https://user-images.githubusercontent.com/84304021/122905820-84b0e600-d38c-11eb-9aa6-5e867dcfdb56.png)
 
 
 
