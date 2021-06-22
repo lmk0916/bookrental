@@ -51,6 +51,8 @@
 ![image](https://user-images.githubusercontent.com/84304021/122903668-97c2b680-d38a-11eb-8029-e0b112f1b01a.png)
 
 #### Policy의 이동과 Context Mapping (점선은 Pub/Sub, 실선은 Req/Resp)
+![image](https://user-images.githubusercontent.com/84304021/122904378-3ea75280-d38b-11eb-8659-b6e936f3f83f.png)
+
 
 
 
