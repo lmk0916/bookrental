@@ -33,5 +33,12 @@
 2. 예약/결제 취소 정보가 변경 될 때마다 도서 예약 가능 여부가 변경 될 수 있어야 한다.(Event Driven)
 
 ## 분석/설계
+
+### Event Storming 결과
+
+- MSAEz 로 모델링한 이벤트스토밍 결과:
+
+![image](https://user-images.githubusercontent.com/84304021/122895802-698da880-d383-11eb-9271-2e098abd3591.png)
+
 ```
 *****
