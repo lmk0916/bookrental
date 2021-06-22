@@ -41,7 +41,11 @@
 #### 이벤트 도출
 ![image](https://user-images.githubusercontent.com/84304021/122895802-698da880-d383-11eb-9271-2e098abd3591.png)
 
-#### 
+#### Actor, Command, Aggregate 추가
+![image](https://user-images.githubusercontent.com/84304021/122902412-5e3d7b80-d389-11eb-8724-412489ac13a5.png)
+
+#### Bounded Context 로 묶기
+
 
 ```
 *****
