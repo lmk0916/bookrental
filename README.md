@@ -45,6 +45,14 @@
 ![image](https://user-images.githubusercontent.com/84304021/122902412-5e3d7b80-d389-11eb-8724-412489ac13a5.png)
 
 #### Bounded Context 로 묶기
+![image](https://user-images.githubusercontent.com/84304021/122902870-d0ae5b80-d389-11eb-8218-11a20fc005e8.png)
+
+#### Policy 부착 (괄호는 수행주체)
+
+
+#### Policy의 이동과 Context Mapping (점선은 Pub/Sub, 실선은 Req/Resp)
+
+
 
 
 ```
