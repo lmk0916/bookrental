@@ -313,3 +313,57 @@ mvn spring-boot:run
 http ask:8080/asks #Fail   #Success
 ```
 - 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, 폴백 처리는 운영단계에 설명)
+
+### 비동기식 호출 / 시간적 디커플링 / 장애격리 / 최종 (Eventual) 일관성 테스트
+결제가 이루어진 후에 도서에 이를 알려주는 행위는 동기식이 아니라 비 동기식으로 처리하여 도서 시스템의 처리를 위하여 결제주문이 블로킹 되지 않아도록 처리한다.
+- 이를 위하여 결제이력에 기록을 남긴 후에 곧바로 승인이 되었다는 도메인 이벤트를 카프카로 송출한다(Publish)
+```
+    @PostPersist
+    public void onPostPersist(){
+
+        ApprovalObtained approvalObtained = new ApprovalObtained();
+        BeanUtils.copyProperties(this, approvalObtained);
+        approvalObtained.publishAfterCommit();
+
+    }
+```
+- 도서 서비스에서는 결제승인 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다. 
+```
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverPaid_Rent(@Payload Paid paid){
+
+        if(paid.isMe()){
+            System.out.println("##### listener Rent : " + paid.toJson());
+
+            Optional<Book> optional = bookRepository.findById(paid.getBookId());
+            Book book = optional.get();
+            book.setAskId(paid.getAskId());
+            book.setStatus("RENTED");
+
+            bookRepository.save(book);
+        }
+    }
+
+```
+- 도서 시스템은 신청/결제와 완전히 분리되어있으며, 이벤트 수신에 따라 처리되기 때문에, 신청/결제 시스템이 유지보수로 인해 잠시 내려간 상태라도 도서를 등록하는데 문제가 없다
+```
+# 도서 (book) 서비스를 잠시 내려놓음 (ctrl+c)
+
+#신청처리
+http ask:8080/asks #Success
+
+#Book 상태 확인
+http book:8081/books     # 상태 안바뀜 확인
+
+#도서서비스 기동
+cd book
+mvn spring-boot:run
+
+#Book 상태 확인
+http book:8081/books     # 상태가 신청상태로 변경 확인
+```
+## 운영
+### CI/CD 설정
+각 구현체들은 각자의 source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 AWS CodeBuild를 사용하였으며, pipeline build script 는 각 프로젝트 폴더 이하에 buildspec.yml 에 포함되었다.
+
+화면!!!
