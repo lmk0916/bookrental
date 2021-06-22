@@ -37,6 +37,7 @@
 ### Event Storming 결과
 
 - MSAEz 로 모델링한 이벤트스토밍 결과:
+ http://www.msaez.io/#/storming/EdLoXS5GivQ3D5rdMVF8LW8AwHR2/mine/0cb8e25511a4990af45763023274e8a6
 
 #### 이벤트 도출
 ![image](https://user-images.githubusercontent.com/84304021/122895802-698da880-d383-11eb-9271-2e098abd3591.png)
