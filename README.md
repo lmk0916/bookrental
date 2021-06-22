@@ -77,14 +77,16 @@ Blue
 ```
 #### 비기능 요구사항에 대한 검증
 ![image](https://user-images.githubusercontent.com/84304021/122906872-91820980-d38d-11eb-9d51-d7e8780d7666.png)
-
 ```
 - 도서 등록 서비스를 예약/결제 서비스와 격리하여 도서 등록 서비스 장애 시에도 예약이 가능
 - 도서가 예약 불가 상태일 경우 예약 확정이 불가함
 - 먼저 결제가 이루어진 도서에 대해서는 예약을 불가 하도록 함
 ```
-
-
-
+### 헥사고날 아키텍처 다이어그램 도출
+![image](https://user-images.githubusercontent.com/84304021/122907341-fccbdb80-d38d-11eb-8e20-314328a6a57b.png)
 ```
-*****
+- Chris Richardson, MSA Patterns 참고하여 Inbound adaptor와 Outbound adaptor를 구분함
+- 호출관계에서 PubSub 과 Req/Resp 를 구분함
+- 서브 도메인과 바운디드 컨텍스트의 분리:  각 팀의 KPI 별로 아래와 같이 관심 구현 스토리를 나눠가짐
+```
+## 구현
