@@ -113,19 +113,19 @@ spring:
     gateway:
       routes:
         - id: ask
-          uri: http://localhost:8081
+          uri: http://localhost:8080
           predicates:
             - Path=/asks/** 
         - id: pay
-          uri: http://localhost:8082
+          uri: http://localhost:8080
           predicates:
             - Path=/pays/** 
         - id: book
-          uri: http://localhost:8083
+          uri: http://localhost:8080
           predicates:
             - Path=/books/** 
         - id: mypage
-          uri: http://localhost:8084
+          uri: http://localhost:8080
           predicates:
             - Path= /mypages/**
 .....생략
