@@ -235,8 +235,10 @@ http get localhost:8083/books
 # 도서 대여상태 조회(CQRS)
 http get mypage:8080/mypages
 ```
-테스트화면!!!!
-테스트화면!!!!!
+![image](https://user-images.githubusercontent.com/84304021/124551912-ca31e080-de6d-11eb-8185-5df827ca79d1.png)
+![image](https://user-images.githubusercontent.com/84304021/124551953-d9189300-de6d-11eb-9c22-c387ede273ca.png)
+![image](https://user-images.githubusercontent.com/84304021/124551998-e897dc00-de6d-11eb-9e62-2f6e703efeb4.png)
+
 
 ### 폴리글랏 퍼시스턴스
 각 마이크로서비스는 별도의 H2 DB를 가지고 있으며 CQRS를 위한 Mypage에서는 H2가 아닌 HSQLDB를 적용하였다.
