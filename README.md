@@ -214,7 +214,8 @@ public interface AskRepository extends PagingAndSortingRepository<Ask, Long>{
 # book 서비스의 등록처리
 http localhost:8083/books id=1 status=WATING bookName=1234
 ```
-![image](https://user-images.githubusercontent.com/84304021/124543508-5806cf00-de60-11eb-8506-1d364e2ceba7.png)
+![image](https://user-images.githubusercontent.com/84304021/124546522-b84c3f80-de65-11eb-8f73-c007b9cc5f1c.png)
+
 
 
 ```
