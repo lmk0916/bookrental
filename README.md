@@ -220,7 +220,7 @@ http localhost:8083/books id=1 status=WATING bookName=1234
 
 ```
 # ask 서비스의 대여신청처리
-http post localhost:8081/asks askId=1 status="ASKED"
+http ask:8080/asks id=1 status="ASKED"
 ```
 ![image](https://user-images.githubusercontent.com/84304021/124551305-e5e8b700-de6c-11eb-9edd-2c012cefe6eb.png)
 
