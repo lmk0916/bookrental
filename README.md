@@ -226,7 +226,7 @@ http post localhost:8081/asks askId=1 status="ASKED"
 
 ```
 # 도서 상태 조회
-http get book:8080/books
+http get localhost:8083/books
 ```
 테스트화면!!!!
 테스트화면!!!!!
