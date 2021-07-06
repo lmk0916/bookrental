@@ -138,19 +138,19 @@ spring:
     gateway:
       routes:
         - id: ask
-          uri: http://ask:8080
+          uri: http://ask:8081
           predicates:
             - Path=/asks/** 
         - id: pay
-          uri: http://pay:8080
+          uri: http://pay:8082
           predicates:
             - Path=/pays/** 
         - id: book
-          uri: http://book:8080
+          uri: http://book:8083
           predicates:
             - Path=/books/** 
         - id: mypage
-          uri: http://mypage:8080
+          uri: http://mypage:8084
           predicates:
             - Path= /mypages/**
 ...
