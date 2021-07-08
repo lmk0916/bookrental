@@ -489,7 +489,7 @@ book 서비스의 경우, 국가와 지역에 따라 설정이 변할 수도 있
 
 - configmap 생성
 
-화면!!!
+![image](https://user-images.githubusercontent.com/84304021/124906675-48cf7f00-e022-11eb-827f-98096eb0eec0.png)
 
 - house deployment를 위에서 생성한 house-region(cm)의 값을 사용 할 수 있도록 수정한다.
 ```
@@ -526,4 +526,4 @@ metadata:
 ```
 - describe로 생성 확인
 
-화면!!!
+![image](https://user-images.githubusercontent.com/84304021/124906829-71577900-e022-11eb-863c-2c5b16646064.png)
