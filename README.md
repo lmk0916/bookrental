@@ -370,7 +370,9 @@ http book:8081/books     # 상태가 신청상태로 변경 확인
 ### CI/CD 설정
 각 구현체들은 각자의 source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 AWS CodeBuild를 사용하였으며, pipeline build script 는 각 프로젝트 폴더 이하에 buildspec.yml 에 포함되었다.
 
-화면!!!
+![image](https://user-images.githubusercontent.com/84304021/124882271-2b42eb00-e00b-11eb-9518-0630d450fb06.png)
+![image](https://user-images.githubusercontent.com/84304021/124882350-401f7e80-e00b-11eb-8464-1dcc4355e37f.png)
+
 
 ### 동기식 호출 / 서킷 브레이킹 / 장애격리
 - 서킷 브레이킹 : istio destination 룰 적용하여 구현한다.
