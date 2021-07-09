@@ -375,7 +375,7 @@ http book:8081/books     # 상태가 신청상태로 변경 확인
 
 book 서비스가 CrashLoopBackOff 로 Kafka 비정상 설치되었음을 확인하여 서비스 정상 작동 확인하였다.
 
-![image](https://user-images.githubusercontent.com/84304021/125009010-ac978d80-e09e-11eb-8775-6e470f196314.png)
+![image](https://user-images.githubusercontent.com/84304021/125010214-1022ba80-e0a1-11eb-97b8-84dee1c79b1c.png)
 
 
 ### configmap
