@@ -429,8 +429,6 @@ metadata:
 - 서킷 브레이킹 : istio destination 룰 적용하여 구현한다.
 시나리오는 대여신청(ask)-->결제(pay) 시의 연결을 RESTful Request/Response 로 연동하여 구현이 되어있고, 결제 요청이 과도할 경우 CB 를 통하여 장애격리
 - 피호출 서비스(결제:pay) 의 임의 부하 처리 - 400 밀리에서 증감 220 밀리 정도 왔다갔다 하게
-```
-
 
 ### Autoscale (HPA)
 CB 는 시스템을 안정되게 운영할 수 있게 해주지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다.
@@ -459,7 +457,7 @@ siege -c20 -t120S -v  --content-type "application/json" 'http://ask:8080/asks PO
 
 ### self Healing (Liveness Probe)
 
-log deployment.yml 파일 수정
+deployment.yml 파일 수정
 콘테이너 실행 후 /tmp/healthy 파일을 만들고 
 삭제 후 restart
 livenessProbe에 'cat /tmp/healthy'으로 검증하도록 함
