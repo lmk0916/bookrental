@@ -373,6 +373,51 @@ http book:8081/books     # 상태가 신청상태로 변경 확인
 ![image](https://user-images.githubusercontent.com/84304021/124882271-2b42eb00-e00b-11eb-9518-0630d450fb06.png)
 ![image](https://user-images.githubusercontent.com/84304021/124882350-401f7e80-e00b-11eb-8464-1dcc4355e37f.png)
 
+### configmap
+book 서비스의 경우, 국가와 지역에 따라 설정이 변할 수도 있음을 가정하고, configmap에 설정된 국가와 지역 설정을 book 서비스에서 받아 사용 할 수 있도록 한다.
+
+아래와 같이 configmap의 data 필드에 보면 country와 region정보가 설정 되어있다.
+
+- configmap 생성
+
+![image](https://user-images.githubusercontent.com/84304021/124906675-48cf7f00-e022-11eb-827f-98096eb0eec0.png)
+
+- house deployment를 위에서 생성한 house-region(cm)의 값을 사용 할 수 있도록 수정한다.
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book
+  labels:
+    app: book
+...
+    spec:
+      containers:
+        - name: book
+          env:                                                 ##### 컨테이너에서 사용할 환경 변수 설정
+            - name: COUNTRY
+              valueFrom:
+                configMapKeyRef:
+                  name: book-region
+                  key: country
+            - name: REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: book-region
+                  key: region
+          volumeMounts:                                                 ##### CM볼륨을 바인딩
+          - name: config
+            mountPath: "/config"
+            readOnly: true
+...
+      volumes:                                                 ##### CM 볼륨 
+      - name: config
+        configMap:
+          name: book-region
+```
+- describe로 생성 확인
+
+![image](https://user-images.githubusercontent.com/84304021/124906829-71577900-e022-11eb-863c-2c5b16646064.png)
 
 ### 동기식 호출 / 서킷 브레이킹 / 장애격리
 - 서킷 브레이킹 : istio destination 룰 적용하여 구현한다.
@@ -482,48 +527,4 @@ kubectl apply -f kubernetes/deployment.yaml
 
 배포기간 동안 Availability 가 변화없기 때문에 무정지 재배포가 성공한 것으로 확인됨
 
-### configmap
-book 서비스의 경우, 국가와 지역에 따라 설정이 변할 수도 있음을 가정하고, configmap에 설정된 국가와 지역 설정을 book 서비스에서 받아 사용 할 수 있도록 한다.
 
-아래와 같이 configmap의 data 필드에 보면 country와 region정보가 설정 되어있다.
-
-- configmap 생성
-
-![image](https://user-images.githubusercontent.com/84304021/124906675-48cf7f00-e022-11eb-827f-98096eb0eec0.png)
-
-- house deployment를 위에서 생성한 house-region(cm)의 값을 사용 할 수 있도록 수정한다.
-```
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: book
-  labels:
-    app: book
-...
-    spec:
-      containers:
-        - name: book
-          env:                                                 ##### 컨테이너에서 사용할 환경 변수 설정
-            - name: COUNTRY
-              valueFrom:
-                configMapKeyRef:
-                  name: book-region
-                  key: country
-            - name: REGION
-              valueFrom:
-                configMapKeyRef:
-                  name: book-region
-                  key: region
-          volumeMounts:                                                 ##### CM볼륨을 바인딩
-          - name: config
-            mountPath: "/config"
-            readOnly: true
-...
-      volumes:                                                 ##### CM 볼륨 
-      - name: config
-        configMap:
-          name: book-region
-```
-- describe로 생성 확인
-
-![image](https://user-images.githubusercontent.com/84304021/124906829-71577900-e022-11eb-863c-2c5b16646064.png)
