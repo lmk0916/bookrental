@@ -315,7 +315,7 @@ cd pay
 mvn spring-boot:run
 
 #신청처리
-http ask:8080/asks #Fail   #Success
+http ask:8080/asks #Success
 ```
 - 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, 폴백 처리는 운영단계에 설명)
 
