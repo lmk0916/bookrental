@@ -225,6 +225,7 @@ http ask:8080/asks id=1 status="ASKED"
 ![image](https://user-images.githubusercontent.com/84304021/124551305-e5e8b700-de6c-11eb-9edd-2c012cefe6eb.png)
 
 
+### CQRS
 ```
 # 도서 상태 조회
 http get localhost:8083/books
