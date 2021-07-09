@@ -425,14 +425,43 @@ metadata:
 
 ![image](https://user-images.githubusercontent.com/84304021/124906829-71577900-e022-11eb-863c-2c5b16646064.png)
 
-### 동기식 호출 / 서킷 브레이킹 / 장애격리
+### Circuit Breaker
+- 서킷 브레이킹 : istio destination 룰 적용하여 구현한다.
+시나리오는 대여신청(ask)-->결제(pay) 시의 연결을 RESTful Request/Response 로 연동하여 구현이 되어있고, 결제 요청이 과도할 경우 CB 를 통하여 장애격리
+- 피호출 서비스(결제:pay) 의 임의 부하 처리 - 400 밀리에서 증감 220 밀리 정도 왔다갔다 하게
+```
 
 
-### 오토스케일 아웃
+### Autoscale (HPA)
+CB 는 시스템을 안정되게 운영할 수 있게 해주지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다.
+- 결제서비스에 대한 replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 15프로를 넘어서면 replica 를 10개까지 늘려준다
+```
+kubectl autoscale deploy ask --min=1 --max=10 --cpu-percent=15
+```
+- CB 에서 했던 방식대로 워크로드를 2분 동안 걸어준다.
+```
+siege -c20 -t120S -v  --content-type "application/json" 'http://ask:8080/asks POST {"id":"1","status":"ASKED" }'
+```
+- 오토스케일이 어떻게 되고 있는지 모니터링을 걸어둔다.
+```
+kubectl get deploy ask -w
+```
 
 
-### 무정지 재배포
+### Zero Downtime deploy (Readiness Probe)
+- 먼저 무정지 재배포가 100% 되는 것인지 확인하기 위해서 Autoscaler 이나 Readiness Probe 미설정 시 무정지 재배포 가능여부 확인을 위해 buildspec.yml의 Readiness Probe 설정을 제거한다
+- seige 로 배포작업 직전에 워크로드를 모니터링 함
+```
+siege -c20 -t120S -v  --content-type "application/json" 'http://ask:8080/asks POST {"id":"1","status":"ASKED" }'
+```
+- seige 의 화면으로 넘어가서 Availability 가 100% 미만으로 떨어졌는지 확인
 
- 
+
+### self Healing (Liveness Probe)
+
+log deployment.yml 파일 수정
+콘테이너 실행 후 /tmp/healthy 파일을 만들고 
+삭제 후 restart
+livenessProbe에 'cat /tmp/healthy'으로 검증하도록 함
 
 
