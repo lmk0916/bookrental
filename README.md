@@ -225,13 +225,13 @@ http ask:8080/asks id=1 status="ASKED"
 ![image](https://user-images.githubusercontent.com/84304021/124551305-e5e8b700-de6c-11eb-9edd-2c012cefe6eb.png)
 
 
-### CQRS
 ```
 # 도서 상태 조회
 http get localhost:8083/books
 ```
 ![image](https://user-images.githubusercontent.com/84304021/124551598-598ac400-de6d-11eb-9703-d98a04f5f7a3.png)
 
+### CQRS
 ```
 # 도서 대여상태 조회(CQRS)
 http get localhost:8084/mypages
