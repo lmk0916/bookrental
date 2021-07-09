@@ -455,7 +455,7 @@ siege -c20 -t120S -v  --content-type "application/json" 'http://ask:8080/asks PO
 - seige 의 화면으로 넘어가서 Availability 가 100% 미만으로 떨어졌는지 확인
 
 
-### self Healing (Liveness Probe)
+### Self Healing (Liveness Probe)
 
 deployment.yml 파일 수정
 콘테이너 실행 후 /tmp/healthy 파일을 만들고 
