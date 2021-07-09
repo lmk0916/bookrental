@@ -1,4 +1,4 @@
-# bookrental
+# Bookrental 서비스
 ## 서비스 시나리오
 
 
@@ -379,7 +379,7 @@ book 서비스가 CrashLoopBackOff 로 Kafka 비정상 설치되었음을 확인
 ![image](https://user-images.githubusercontent.com/84304021/125010214-1022ba80-e0a1-11eb-97b8-84dee1c79b1c.png)
 
 
-### configmap
+### Configmap
 book 서비스의 경우, 국가와 지역에 따라 설정이 변할 수도 있음을 가정하고, configmap에 설정된 국가와 지역 설정을 book 서비스에서 받아 사용 할 수 있도록 한다.
 
 아래와 같이 configmap의 data 필드에 보면 country와 region정보가 설정 되어있다.
